@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <div id="container">
+        <div>
+            <nav id="nav">
+                <div id="leftNav">
+                    <p>Select Date :</p>
+                    <h4 id="error" style="display: none; color: red;">Plaese Enter Date</h4>
+                    <input type="date" id="date">
+                    <button id="search">Search</button>
+                </div>
+                <div id="rightNav">
+                    <button id="fetchAttendance">Fetch Attendance</button>
+                </div>
+            </nav>
+        </div>
+        <div id="main">
+            <div id="attendanceInfo">
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <button id="postAttendance" style="display: none;">postAttendance</button>
+    </div>
+    <div id="inputStudents" style="display: none;">
+        <div>
+            <input type="text" id="name">
+            <button id="enter">Enter</button>
+        </div>
+        <div>
+            <button id="submit">Submit</button>
+        </div>
+        
+    </div>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

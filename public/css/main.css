@@ -1,0 +1,33 @@
+body{
+    background-color: antiquewhite;
+}
+#nav{
+    width: 95%;
+    height: 70px ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(238, 177, 103);
+    border-radius: 10px;
+    padding-inline-start: 20px;
+    padding-inline-end: 20px;
+}
+#leftNav{
+    display: flex;
+    align-items: center;
+}
+
+.students{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(146, 238, 238);
+    padding: 0.2px;
+    margin:1px;
+    border-radius: 5px;
+}
+.info{
+    display: flex;
+    justify-content: space-between;
+    width: 20%;
+    padding-inline-end: 30px;
+}
