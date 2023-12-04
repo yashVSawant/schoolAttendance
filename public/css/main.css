@@ -1,6 +1,23 @@
 body{
     background-color: antiquewhite;
 }
+button{
+    height: 30px;
+    background-color:rgb(211, 231, 97);
+    border: 1px solid rgb(136, 153, 39);
+    border-radius: 4px;
+}
+input{
+    margin:20px;
+}
+#fetchAttendance{
+    background-color:rgb(133, 235, 74)
+}
+#postAttendanceButton{
+    display: flex;
+    justify-content: flex-end;
+    margin:1px
+}
 #nav{
     width: 95%;
     height: 70px ;
@@ -13,6 +30,7 @@ body{
     padding-inline-end: 20px;
 }
 #leftNav{
+    width: 40%;
     display: flex;
     align-items: center;
 }
@@ -24,6 +42,7 @@ body{
     padding: 0.2px;
     margin:1px;
     border-radius: 5px;
+    padding-inline-start: 20px;
 }
 .info{
     display: flex;

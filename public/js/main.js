@@ -5,48 +5,6 @@ const submit = document.getElementById('submit');
 const postAttendance = document.getElementById('postAttendance');
 const fetchAttendance = document.getElementById('fetchAttendance');
 
-search.addEventListener('click',async()=>{
-    const date = document.getElementById('date');
-    const attendanceInfo = document.getElementById('attendanceInfo');
-    if(date.value){
-        try{
-            const students = await axios.get('http://localhost:2000/getStudents')
-            if(attendanceInfo.children[0].children[1]){
-                for(let data of students.data){
-                    const getStudentDiv = document.getElementById(`${data.id}`)
-                    getStudentDiv.removeChild(getStudentDiv.children[1]);
-                }
-            }
-                
-            const checkDate = await axios.get(`http://localhost:2000/getDate?date=${date.value}`);
-            if(checkDate.data){
-                const getData = await axios.get(`http://localhost:2000/getAttendance?date=${date.value}`);
-                hidePostButton();
-                for(let data of getData.data){
-                    createMarked(data.StudentId,data.present);
-                }
-            }else{
-                showPostButton();
-                for(let data of students.data){
-                    createRadio(data.id);
-                }
-                
-            }
-        }catch(err){
-            console.log(err);
-        }
-    }else{
-        const errorMsg = document.getElementById('error');
-        errorMsg.style.display = 'inline';
-        setTimeout(()=>{
-            errorMsg.style.display = 'none'
-        },2000)
-    }
-    
-    
-
-})
-
 window.addEventListener('DOMContentLoaded',async()=>{
     try{
         const getStudents = await axios.get('http://localhost:2000/getStudents');
@@ -55,11 +13,11 @@ window.addEventListener('DOMContentLoaded',async()=>{
             const container = document.getElementById('container');
             inputStudents.style.display = 'inline';
             container.style.display = 'none'
-        }else{
+        }
+        else{
             const students = await axios.get('http://localhost:2000/getStudents')
-            for(let data of students.data){          
-                createStudents(data.name,data.id);
-            }
+            students.data.forEach((data)=> createStudents(data.name,data.id))          
+               
         }
     }catch(err){
         console.log(err)
@@ -89,18 +47,53 @@ submit.addEventListener('click',()=>{
             container.style.display = 'inline'
 })
 
+search.addEventListener('click',async()=>{
+    const date = document.getElementById('date');
+    if(date.value){
+        try{
+            const students = await axios.get('http://localhost:2000/getStudents')
+            removeDivIfExist();   
+            const checkDate = await axios.get(`http://localhost:2000/getDate?date=${date.value}`);
+            if(checkDate.data){
+                const getData = await axios.get(`http://localhost:2000/getAttendance?date=${date.value}`);
+                hidePostButton();
+                getData.data.forEach((item) => createMarked(item.StudentId, item.present));
+            }else{
+                showPostButton();
+                students.data.forEach((item)=>createRadio(item.id))
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }else{
+        const errorMsg = document.getElementById('error');
+        errorMsg.style.display = 'inline';
+        setTimeout(()=>{
+            errorMsg.style.display = 'none'
+        },2000)
+    }
+    
+    
+
+})
+
 postAttendance.addEventListener('click',async()=>{
     const date = document.getElementById('date');
     const array = [];
     try{
         const getStudent = await axios.get('http://localhost:2000/getStudents');
-        for(let data of getStudent.data){
+        getStudent.data.forEach((data)=>{
             const getRadio = document.getElementById(`radio${data.id}`);
             const present = getRadio.children[0].checked;
             array.push({'id':data.id,'present':present});
-        }
-        console.log(array);
+            const getStudentDiv = document.getElementById(`${data.id}`)
+            getStudentDiv.removeChild(getStudentDiv.children[1]);
+            createMarked(data.id,present);
+        })
+        // console.log(array);
         const postAttendance = await axios.post(`http://localhost:2000/postAttendance?id=${date.value}`,{array})
+        hidePostButton();
+        
     }catch(err){
         console.log(err)
     }
@@ -109,24 +102,33 @@ postAttendance.addEventListener('click',async()=>{
 fetchAttendance.addEventListener('click',async()=>{
     hidePostButton();
     try{
+        removeDivIfExist();
         const getData = await axios.get('http://localhost:2000/fetchedAttendance');
-        const students = await axios.get('http://localhost:2000/getStudents')
-            if(attendanceInfo.children[0].children[1]){
-                for(let data of students.data){
-                    const getStudentDiv = document.getElementById(`${data.id}`)
-                    getStudentDiv.removeChild(getStudentDiv.children[1]);
-                }
-            }
-
-        for(let data of getData.data){
-            console.log(data.id,data.present);
-            createTotalAttendance(data.id,data.present,data.days)
-        }
+        getData.data.forEach((data)=>createTotalAttendance(data.id,data.present,data.days))
     }catch(err){
         console.log(err)
     }
    
 })
+async function removeDivIfExist(){
+    const attendanceInfo = document.getElementById('attendanceInfo');
+        try{
+            const students = await axios.get('http://localhost:2000/getStudents');
+            if(attendanceInfo.children[0]){
+                if(attendanceInfo.children[0].children[1]){
+                    
+                    students.data.forEach((data)=>{
+                        const getStudentDiv = document.getElementById(`${data.id}`)
+                        getStudentDiv.removeChild(getStudentDiv.children[1]);
+                    })
+                }
+            }else{
+                students.data.forEach((data)=>createStudents(data.name,data.id));    
+            }
+        }catch(err){
+            console.log(err)
+        }
+}
 
 function createStudents(name,id){
     const attendanceInfo = document.getElementById('attendanceInfo');
@@ -188,7 +190,8 @@ function createTotalAttendance(id,presentDays,totalDays){
     attendanceDiv.className='info'
 
     presentOutOf.innerText=`${presentDays}/${totalDays}`
-    presentPersentage.innerText=`${presentDays/totalDays*100}%`
+    const persent =(presentDays/totalDays*100).toFixed(2);
+    presentPersentage.innerText=`${persent} %`
 
     attendanceDiv.appendChild(presentOutOf);
     attendanceDiv.appendChild(presentPersentage);

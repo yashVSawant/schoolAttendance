@@ -1,6 +1,6 @@
-const date = require('../modules/date');
-const student = require('../modules/student');
-const presenty = require('../modules/presenty');
+const date = require('../models/date');
+const student = require('../models/student');
+const presenty = require('../models/presenty');
 
 exports.getstudents = async(req,res,next)=>{
     try{
@@ -52,9 +52,8 @@ exports.getDateInfo = async(req,res,next)=>{
 }
 
 exports.getMarkedAttendance = async(req,res,next)=>{
-    const presentyDate = req.query.date;
-    //console.log("pres",presentyDate);
-    try{   
+    try{
+        const presentyDate = req.query.date;   
         const getPresenty = await presenty.findAll({where:{DateDate:presentyDate}});
         res.json(getPresenty);
     }catch(err){

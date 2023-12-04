@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../public/css/main.css">
 </head>
 <body>
     <div id="container">
         <div>
             <nav id="nav">
                 <div id="leftNav">
-                    <p>Select Date :</p>
+                    <h3>Select Date :</h3>
                     <h4 id="error" style="display: none; color: red;">Plaese Enter Date</h4>
                     <input type="date" id="date">
                     <button id="search">Search</button>
@@ -27,7 +27,7 @@
         </div>
 
     </div>
-    <div>
+    <div id="postAttendanceButton">
         <button id="postAttendance" style="display: none;">postAttendance</button>
     </div>
     <div id="inputStudents" style="display: none;">
@@ -41,6 +41,6 @@
         
     </div>
     <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-    <script src="../js/main.js"></script>
+    <script src="../public/js/main.js"></script>
 </body>
 </html>

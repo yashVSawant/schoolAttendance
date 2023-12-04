@@ -1,30 +1,37 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
 const sequelize = require('./util/database');
-
-const date = require('./modules/date');
-const student = require('./modules/student');
-const presenty = require('./modules/presenty');
-
-const homePageRoute = require('./routes/homePage');
+const date = require('./models/date');
+const student = require('./models/student');
+const presenty = require('./models/presenty');
 const attendanceInfoRoute = require('./routes/attendance');
-
-app.use(bodyParser.json())
-
-app.use(express.static('public'));
 
 date.belongsToMany(student,{through:presenty});
 student.belongsToMany(date,{through:presenty});
 
-app.use(homePageRoute);
+app.use(cors());
+app.use(bodyParser.json());
+
 app.use(attendanceInfoRoute);
+app.use((req,res,next)=>{
+    res.status(404).send('error:404');
+})
 
 sequelize
-.sync()
-.then(res=>{
-    app.listen(2000);  
-})
+    .sync()
+    .then(()=>{
+        console.log('server port started');
+        app.listen(2000); 
+    })
+    .catch(err=>{
+        console.log(err);
+    }) 
+
+        
+    
+
 
